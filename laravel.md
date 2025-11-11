@@ -108,3 +108,98 @@ MAIL_FROM_NAME="Rasoah" //name you want
 11. then we set $this -> ourVariable = $parameter;
 12. then we go to second function and type the blade page it will render the message
 13. in the blade page we use {{$parameter}} directly
+
+# SMTP Send Email
+
+- it is for sending messages via email
+- **How to do it?**
+
+1. I must have an email that it will sends the messages in project
+2. i must enable 2 step verification in the email
+3. then we search for app passwords
+4. then we enter to app passwords and enter the app name we want
+5. a password field will show....i must save this password in my note
+6. we set up the .env settings with this:
+
+```
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=iamwhitebeard2@gmail.com //your email
+MAIL_PASSWORD=fnlu qoya kmbx olzz //password you saved
+MAIL_FROM_ADDRESS=iamwhitebeard2@gmail.com //your email
+MAIL_FROM_NAME="Rasoah" //name you want
+```
+
+7. **php artisan make:mail MailName**
+8. in controller we write:`Mail::to($email) -> send(new MailName($parameter we want to show in message));`
+9. in the class we write a variable ..public $variable
+10. in constructor we write the parameter we sent in the ()
+11. then we set `$this -> ourVariable = $parameter;`
+12. then we go to second function and type the blade page it will render the message
+13. in the blade page we use {{$parameter}} directly
+
+# How to make Auth with another table?
+
+1. we go to auth.php in config..and do copy and paste the guards and providers.
+2. Example:
+
+```
+  'guards' => [
+    'web' => [
+      'driver' => 'session',
+      'provider' => 'users',
+    ],
+    'marketer' => [
+      'driver' => 'session',
+      'provider' => 'marketers'
+    ],
+  ],
+
+
+    'providers' => [
+    'users' => [
+      'driver' => 'eloquent',
+      'model' =>  App\Models\User::class,
+    ],
+    'marketers' => [
+      'driver' => 'eloquent',
+      'model' => Modules\MarketerModule\Models\MarketerModel::class,
+    ],
+  ],
+```
+
+3. we go to the model of second table and add extends Authenticable..we can copy it from User Model
+   `use Illuminate\Foundation\Auth\User as Authenticatable;`
+4. if we want to auth with certain table..we use Auth::guard("guard_name")->login or logout...
+
+# LaravelLocalization Package:
+
+1. it is a package to handle the change of locale in app.php in config..so i can switch language..
+2. For Example:
+
+```
+Route::group([
+  "prefix" => "/" . LaravelLocalization::setLocal()
+] ,  function() {routes..});
+```
+
+3. `LaravelLocalization::setLocal()` gets the local from url and set it to locale and return it..
+4. if url is /ar/test then it will set local to ar and return ar
+5. so in backend we just need to chack what is `app() -> getLocal()` so we can change returned json.
+6. ### Tips:
+
+- we must use **Redirects Middlewares** so we can handle alot of things like:
+- "localeSessionRedirect" => it store the current locale in the session..so if user navigates to "/test" ..this middleware will returned him to "/currentLocal/test"
+- "localizationRedirect" => Ensures that every URL has a language prefix. If the user visits a route without /en or /ar, it redirects to the correct localized URL.
+
+7. ### Helpers:
+
+- `LaravelLocalization::localizeUrl('/test')` => // If current locale is Spanish, it returns `/es/test`
+- `LaravelLocalization::getLocalizedURL('en')` => // Returns current url with English locale.
+- `LaravelLocalization::getSupportedLocales()` => //get all supported locals
+- `LaravelLocalization::getSupportedLanguagesKeys()` => //get all supported keys for locals
+- `LaravelLocalization::getCurrentLocale()` => //Return the key of the current locale.
+
+8. ### To change lang:
