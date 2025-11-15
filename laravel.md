@@ -44,7 +44,7 @@ Log:info("attempt to auth" , ["auth_data" => $req -> only("name" , "email")]);
 
 1. in the table of database we add column called `$table->softDeletes();`
 2. this will create column called **deleted_at**
-3. when the this is deleted...the deleted_at will has a value..and when he thing is not deleted...then the deleted_at is null..
+3. when the this is deleted...the deleted_at will has a value..and when the thing is not deleted...then the deleted_at is null..
 4. laravel automaticlly handle this thing
 
 - **Steps for soft delete**
